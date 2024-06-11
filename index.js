@@ -55,7 +55,7 @@ let userNames = {};
 let voters = new Set(); // Set to track phone numbers that have already voted
 let userLanguages = {}; // Object to store the language preference of each user
 
-app.post('/voting', (req, res) => {
+app.post('/ussd', (req, res) => {
     let response = '';
 
     // Extract USSD input
@@ -67,7 +67,7 @@ app.post('/voting', (req, res) => {
     // Determine next action based on user input
     if (userInput.length === 1 && userInput[0] === '') {
         // First level menu: Language selection
-        response = `CON Welcome to the Voting System\n Hitamo ururimi.`;
+        response = `CON Welcome to the County President Voting System\n Hitamo ururimi.`;
         response += `1. English\n`;
         response += `2. Kinyarwanda`;
     } else if (userInput.length === 1 && userInput[0] !== '') {
@@ -82,7 +82,7 @@ app.post('/voting', (req, res) => {
 
         // Third level menu: Main menu
         response = userLanguages[phoneNumber] === 'en' ? 
-            `CON Hey! ${userNames[phoneNumber]}, choose an option:\n1. Vote Candidate\n2. View Votes` : 
+            `CON Hello ${userNames[phoneNumber]}, choose an option:\n1. Vote Candidate\n2. View Votes` : 
             `CON Muraho ${userNames[phoneNumber]}, hitamo:\n1. Tora umukandida\n2. Reba amajwi`;
     } else if (userInput.length === 3) {
         if (userInput[2] === '1') {
@@ -114,7 +114,7 @@ app.post('/voting', (req, res) => {
             votes[candidateNames[candidateIndex]] += 1;
             voters.add(phoneNumber); // Mark this phone number as having voted
             response = userLanguages[phoneNumber] === 'en' ? 
-                `END Thank you for voting to ${candidateNames[candidateIndex]}!` : 
+                `END Thank you for voting for ${candidateNames[candidateIndex]}!` : 
                 `END Murakoze gutora ${candidateNames[candidateIndex]}!`;
 
             // Insert voting record into the database
@@ -135,7 +135,7 @@ app.post('/voting', (req, res) => {
         } else {
             response = userLanguages[phoneNumber] === 'en' ? 
                 `END Invalid selection. Please try again.` : 
-                `END Amahitamo ntabwo ariyo. Ongera mugerageze.`;
+                `END Amahitamo siyo. Ongera mugerageze.`;
         }
     }
 
